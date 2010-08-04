@@ -1,0 +1,12 @@
+---
+config:
+ name: "System Rescue CD"
+ use: isoloop
+ boot_path: /isolinux/
+ kernel: rescuecd
+ initrd: initram.igz
+ root_dev: /dev/sdb1
+ grub_dev: "(hd1,1)"
+ iso_path: /boot/
+ iso_filename: sysresc.iso
+ boot_opts: "vga=37C"

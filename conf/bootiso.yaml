@@ -1,0 +1,4 @@
+---
+global:
+ blkid: /sbin/blkid
+ cfgpath: /etc/bootiso
