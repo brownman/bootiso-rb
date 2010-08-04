@@ -2,3 +2,47 @@
 
 A simple ruby script that adds bootable iso entries to GRUB 2
 
+Since GRUB 2 supports this awesome feature that enables the bootloader to boot directly from ad ISO image, I wrote this little ruby program that automatically syncs the configuration of the bootloader with ISO specs written by the user.
+
+Every bootable ISO entry must be described in a spec file (YAML format). The standard format is very simple, and little info is needed in order to put everything to work.
+
+---
+config:
+name: "System Rescue CD"
+use: isoloop
+boot_path: /isolinux/
+kernel: rescuecd
+initrd: initram.igz
+root_dev: /dev/sdb1
+grub_dev: "(hd1,1)"
+iso_path: /boot/iso/
+iso_filename: sysresc.iso
+boot_opts: "vga=37C"
+
+A little explanation of the YAML parameters:
+
+- name : entry name that will pop up in the grub menu i
+- use : root-bind method that the iso distribution uses to boot the operating system (may vary.. Sysresc uses isoloop, Ubuntu uses findiso) 
+- boot_path : internal iso path where kernel image and initrd files are located 
+- kernel : kernel image file name 
+- initrd : initial ramdisk file name 
+- root_dev : physical disk partition where the ISO path is located 
+- grub_dev : same as before, but this time the device must be specified in GRUB format (for example if root_dev==/dev/sdb1, grub_dev==(hd1,1)) 
+- iso_path : path where the ISO file is located (calculated from the BASE PATH from root_dev) 
+- iso_filename : ISO file name 
+- boot_opts : boot parameters that will be passed to the kernel image
+
+Last but not least, put the script in /etc/grub.d/ with the name “35_bootiso”, and set the execution bit on it. Now just launch update-grub and grub.cfg will be automatically updated with the new directives:
+
+# BOOTISO Generated entries below
+# BOOT ENTRY for: System Rescue CD
+menuentry "System Rescue CD" {
+      insmod ext2
+      set root='(hd1,1)'
+      search --no-floppy --fs-uuid --set fe5190bc-71f4-402a-a70a-054af7ed37a6
+      loopback loop /boot/iso/sysresc.iso
+      linux (loop)/isolinux/rescuecd isoloop=/boot/iso/sysresc.iso vga=37C
+      initrd (loop)/isolinux/initram.igz
+}
+
+You can add more entries by generating multiple YAML specs in /etc/bootiso. 
