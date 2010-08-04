@@ -1,0 +1,4 @@
+===== BOOTISO =====
+
+A simple ruby script that adds bootable iso entries to GRUB 2
+
