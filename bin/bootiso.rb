@@ -121,7 +121,14 @@ class EntryGenerator
 
 		# fill data into the spec
 		@spec[:name] = @file[$tags[:config]][$tags[:name]]
-		@spec[:use] = @file[$tags[:config]][$tags[:use]]
+		
+		@spec[:use] = case @file[$tags[:config]][$tags[:use]]
+		    when "bootiso" then "bootiso"
+		    when "findiso" then "findiso"
+		    when "isoscan" then "iso-scan/filename"
+		    when "isoloop" then "isoloop"
+		end
+		
 		@spec[:boot_path] = @file[$tags[:config]][$tags[:boot_path]]
 		@spec[:kernel] = @file[$tags[:config]][$tags[:kernel]]
 		@spec[:initrd] = @file[$tags[:config]][$tags[:initrd]]
