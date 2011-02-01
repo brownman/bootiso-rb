@@ -1,0 +1,12 @@
+---
+config:
+ name: "Digital Evidence Forensic Toolkit (DEFT) 6.0"
+ use: findiso
+ boot_path: /casper/
+ kernel: vmlinuz
+ initrd: initrd.lz
+ root_dev: /dev/sdb1
+ grub_dev: "(hd1,1)"
+ iso_path: /boot/iso/
+ iso_filename: deft_6.iso
+ boot_opts: "vga=37C"
